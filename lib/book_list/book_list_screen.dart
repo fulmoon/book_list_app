@@ -1,3 +1,4 @@
+import 'package:book_list_app/add_book/add_book_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:book_list_app/book_list/book_list_view_model.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,10 @@ class BookListScreen extends StatelessWidget {
         }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddBookScreen()),
+          );
         },
         child: const Icon(Icons.add),
 
