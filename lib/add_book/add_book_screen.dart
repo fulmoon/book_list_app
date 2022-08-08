@@ -30,6 +30,9 @@ class _AddBookScreenState extends State<AddBookScreen> {
       body: Column(
         children: [
           TextField(
+            onChanged: (_) {
+              setState(() {});
+            },
             controller: _titleTextController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -37,12 +40,25 @@ class _AddBookScreenState extends State<AddBookScreen> {
             ),
           ),
           TextField(
+            onChanged: (_) {
+              setState(() {});
+            },
             controller: _authorTextController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: '저자',
             ),
-          )
+          ),
+          ElevatedButton(
+              onPressed: _titleTextController.text.isEmpty || _authorTextController.text.isEmpty ? null : () {
+                viewModel.addBook(
+                  title: _titleTextController.text,
+                  author: _authorTextController.text,
+                );
+
+                Navigator.pop(context);
+              },
+              child: const Text('도서추가'))
         ],
       ),
       floatingActionButton: FloatingActionButton(
