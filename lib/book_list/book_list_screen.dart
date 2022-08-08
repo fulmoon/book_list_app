@@ -15,38 +15,50 @@ class BookListScreen extends StatelessWidget {
         title: const Text('도서 리스트 앱'),
       ), //AppBar
       body: StreamBuilder<QuerySnapshot>(
-        stream: viewModel.bookStream,
-        builder: (context, snapshot){
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
+          stream: viewModel.bookStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
 
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return const Text('Loading');
-          }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text('Loading');
+            }
 
-          return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data()! as Map<String, dynamic>;
-              return ListTile(
-                title: Text(data['title']),
-                subtitle: Text(data['author']),
-              );
-            }).toList(),
-          );
-        }),
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data =
+                    document.data()! as Map<String, dynamic>;
+                return Dismissible(
+                  onDismissed: (_) {
+                    viewModel.deleteBook(document.id);
+                  },
+                  background: Container(
+                    alignment: Alignment.centerLeft,
+                    color: Colors.red,
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                  key: ValueKey(document.id),
+                  child: ListTile(
+                    title: Text(data['title']),
+                    subtitle: Text(data['author']),
+                  ),
+                );
+              }).toList(),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AddBookScreen()),
+            context,
+            MaterialPageRoute(builder: (context) => const AddBookScreen()),
           );
         },
         child: const Icon(Icons.add),
-
       ),
     );
   }
 }
-
