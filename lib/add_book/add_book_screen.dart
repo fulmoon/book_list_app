@@ -50,22 +50,27 @@ class _AddBookScreenState extends State<AddBookScreen> {
             ),
           ),
           ElevatedButton(
-              onPressed: _titleTextController.text.isEmpty || _authorTextController.text.isEmpty ? null : () {
-                viewModel.addBook(
-                  title: _titleTextController.text,
-                  author: _authorTextController.text,
-                );
+              onPressed: viewModel.isValid(
+                _titleTextController.text,
+                _authorTextController.text,
+              )
+                  ? () {
+                      viewModel.addBook(
+                        title: _titleTextController.text,
+                        author: _authorTextController.text,
+                      );
 
-                Navigator.pop(context);
-              },
+                      Navigator.pop(context);
+                    }
+                  : null,
               child: const Text('도서추가'))
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           viewModel.addBook(
-              title: _titleTextController.text,
-              author: _authorTextController.text,
+            title: _titleTextController.text,
+            author: _authorTextController.text,
           );
 
           Navigator.pop(context);
