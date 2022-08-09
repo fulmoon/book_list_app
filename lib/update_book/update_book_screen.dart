@@ -45,6 +45,9 @@ class _UpdateBookScreenState extends State<UpdateBookScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                onChanged: (_) {
+                  setState(() {});
+                },
                 controller: _titleTextController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -55,6 +58,9 @@ class _UpdateBookScreenState extends State<UpdateBookScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                onChanged: (_) {
+                  setState(() {});
+                },
                 controller: _authorTextController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -67,13 +73,21 @@ class _UpdateBookScreenState extends State<UpdateBookScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          viewModel.updateBook(
-            id: widget.document.id,
-            title: _titleTextController.text,
-            author: _authorTextController.text,
-          );
-
-          Navigator.pop(context);
+          //Validation
+          if(viewModel.isValid(_titleTextController.text, _authorTextController.text)){
+            viewModel.updateBook(
+              id: widget.document.id,
+              title: _titleTextController.text,
+              author: _authorTextController.text,
+            );
+            Navigator.pop(context);
+          } else{
+            //Diplay Error!
+            const snackBar = SnackBar(
+              content: Text('제목과 저자를 입력해 주세요'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
         },
         child: const Icon(Icons.done),
       ),

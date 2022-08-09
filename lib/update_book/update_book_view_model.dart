@@ -13,4 +13,8 @@ class UpdateBookViewModel {
       "author": author,
     });
   }
+
+  bool isValid(String title, String author){
+    return title.isNotEmpty && author.isNotEmpty;
+  }
 }

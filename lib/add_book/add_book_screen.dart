@@ -62,15 +62,14 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   _titleTextController.text,
                   _authorTextController.text,
                 )
-                    ? () {
-                        viewModel.addBook(
-                          title: _titleTextController.text,
-                          author: _authorTextController.text,
-                        );
-
-                        Navigator.pop(context);
-                      }
-                    : null,
+                ? () {
+                  viewModel.addBook(
+                    title: _titleTextController.text,
+                    author: _authorTextController.text,
+                  );
+                  Navigator.pop(context);
+                }
+                : null,
                 child: const Text('도서추가'))
           ],
         ),
