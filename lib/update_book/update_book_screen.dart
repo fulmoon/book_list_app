@@ -38,23 +38,32 @@ class _UpdateBookScreenState extends State<UpdateBookScreen> {
       appBar: AppBar(
         title: const Text('도서 갱신'),
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _titleTextController,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: '제목',
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _titleTextController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: '제목',
+                ),
+              ),
             ),
-          ),
-          TextField(
-            controller: _authorTextController,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: '저자',
-            ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _authorTextController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: '저자',
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
