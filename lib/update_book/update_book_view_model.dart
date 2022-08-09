@@ -8,13 +8,19 @@ class UpdateBookViewModel {
     required String title,
     required String author,
   }) {
-    _db.collection('books').doc(id).set({
-      "title": title,
-      "author": author,
-    });
-  }
+    bool isValid = title.isNotEmpty && author.isNotEmpty;
 
-  bool isValid(String title, String author){
-    return title.isNotEmpty && author.isNotEmpty;
+    if (isValid){
+      _db.collection('books').doc(id).set({
+        'titile': title,
+        "author": author,
+      });
+    } else if (title.isEmpty && author.isEmpty){
+      throw '제목과 저자를 입력해 주세요';
+    } else if (title.isEmpty){
+      throw '제목을 입력해 주세요';
+    } else if (author.isEmpty){
+      throw '저자를 입력해 주세요';
+    }
   }
 }
