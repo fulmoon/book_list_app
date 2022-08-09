@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:book_list_app/add_book/add_book_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddBookScreen extends StatefulWidget {
   const AddBookScreen({Key? key}) : super(key: key);
@@ -13,6 +16,11 @@ class _AddBookScreenState extends State<AddBookScreen> {
   final _authorTextController = TextEditingController();
 
   final viewModel = AddBookViewModel();
+
+  final ImagePicker _picker = ImagePicker();
+
+  //byte array
+  Uint8List? _bytes;
 
   @override
   void dispose() {
@@ -31,6 +39,31 @@ class _AddBookScreenState extends State<AddBookScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () async {
+                  XFile? image =
+                      await _picker.pickImage(source: ImageSource.gallery);
+                  if (image != null) {
+                    //byte array
+                    _bytes = await image.readAsBytes();
+                    setState(() {});
+                  }
+                },
+                child: _bytes == null
+                    ? Container(
+                        width: 200,
+                        height: 200,
+                        color: Colors.grey,
+                      )
+                    : Image.memory(
+                        _bytes!,
+                        width: 200,
+                        height: 200,
+                      ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
@@ -58,18 +91,19 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
             ),
             ElevatedButton(
-                onPressed: viewModel.isValid(
-                  _titleTextController.text,
-                  _authorTextController.text,
-                )
-                ? () {
-                  viewModel.addBook(
-                    title: _titleTextController.text,
-                    author: _authorTextController.text,
-                  );
-                  Navigator.pop(context);
-                }
-                : null,
+                onPressed:
+                  viewModel.isValid(
+                    _titleTextController.text,
+                    _authorTextController.text,
+                  )
+                  ? () {
+                    viewModel.addBook(
+                        title: _titleTextController.text,
+                        author: _authorTextController.text,
+                        bytes: _bytes);
+                    Navigator.pop(context);
+                  }
+                  : null,
                 child: const Text('도서추가'))
           ],
         ),
@@ -79,6 +113,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
           viewModel.addBook(
             title: _titleTextController.text,
             author: _authorTextController.text,
+            bytes: _bytes,
           );
 
           Navigator.pop(context);
