@@ -46,7 +46,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   child: GestureDetector(
                     onTap: () async {
                       XFile? image =
-                      await _picker.pickImage(source: ImageSource.gallery);
+                          await _picker.pickImage(source: ImageSource.gallery);
                       if (image != null) {
                         //byte array
                         _bytes = await image.readAsBytes();
@@ -55,15 +55,15 @@ class _AddBookScreenState extends State<AddBookScreen> {
                     },
                     child: _bytes == null
                         ? Container(
-                      width: 200,
-                      height: 200,
-                      color: Colors.grey,
-                    )
+                            width: 200,
+                            height: 200,
+                            color: Colors.grey,
+                          )
                         : Image.memory(
-                      _bytes!,
-                      width: 200,
-                      height: 200,
-                    ),
+                            _bytes!,
+                            width: 200,
+                            height: 200,
+                          ),
                   ),
                 ),
                 Padding(
@@ -93,23 +93,28 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed:
-                  viewModel.isValid(
-                    _titleTextController.text,
-                    _authorTextController.text,
-                  )
-                      ? null
-                      : () async {
-                    viewModel.startLoading();
-                    await viewModel.addBook(
-                        title: _titleTextController.text,
-                        author: _authorTextController.text,
-                        bytes: _bytes);
-                    viewModel.endLoading();
+                    onPressed: viewModel.isValid(
+                      _titleTextController.text,
+                      _authorTextController.text,
+                    )
+                        ? () async {
+                            setState(() {
+                              viewModel.startLoading();
+                            });
 
-                    Navigator.pop(context);
-                  },
-                  child: const Text('도서추가'))
+                            await viewModel.addBook(
+                              title: _titleTextController.text,
+                              author: _authorTextController.text,
+                              bytes: _bytes,
+                            );
+                            setState(() {
+                              viewModel.endLoading();
+                            });
+
+                            Navigator.pop(context);
+                          }
+                        : null,
+                    child: const Text('도서추가'))
               ],
             ),
             if (viewModel.isLoading)
@@ -121,18 +126,6 @@ class _AddBookScreenState extends State<AddBookScreen> {
               )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          viewModel.addBook(
-            title: _titleTextController.text,
-            author: _authorTextController.text,
-            bytes: _bytes,
-          );
-
-          Navigator.pop(context);
-        },
-        child: const Icon(Icons.done),
       ),
     );
   }
