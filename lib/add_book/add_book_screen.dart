@@ -37,74 +37,88 @@ class _AddBookScreenState extends State<AddBookScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () async {
-                  XFile? image =
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      XFile? image =
                       await _picker.pickImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    //byte array
-                    _bytes = await image.readAsBytes();
-                    setState(() {});
-                  }
-                },
-                child: _bytes == null
-                    ? Container(
-                        width: 200,
-                        height: 200,
-                        color: Colors.grey,
-                      )
-                    : Image.memory(
-                        _bytes!,
-                        width: 200,
-                        height: 200,
-                      ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (_) {
-                  setState(() {});
-                },
-                controller: _titleTextController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: '제목',
+                      if (image != null) {
+                        //byte array
+                        _bytes = await image.readAsBytes();
+                        setState(() {});
+                      }
+                    },
+                    child: _bytes == null
+                        ? Container(
+                      width: 200,
+                      height: 200,
+                      color: Colors.grey,
+                    )
+                        : Image.memory(
+                      _bytes!,
+                      width: 200,
+                      height: 200,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (_) {
-                  setState(() {});
-                },
-                controller: _authorTextController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: '저자',
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (_) {
+                      setState(() {});
+                    },
+                    controller: _titleTextController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: '제목',
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            ElevatedButton(
-                onPressed:
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (_) {
+                      setState(() {});
+                    },
+                    controller: _authorTextController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: '저자',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed:
                   viewModel.isValid(
                     _titleTextController.text,
                     _authorTextController.text,
                   )
-                  ? () {
-                    viewModel.addBook(
+                      ? null
+                      : () async {
+                    viewModel.startLoading();
+                    await viewModel.addBook(
                         title: _titleTextController.text,
                         author: _authorTextController.text,
                         bytes: _bytes);
+                    viewModel.endLoading();
+
                     Navigator.pop(context);
-                  }
-                  : null,
-                child: const Text('도서추가'))
+                  },
+                  child: const Text('도서추가'))
+              ],
+            ),
+            if (viewModel.isLoading)
+              Container(
+                color: Colors.black45,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
           ],
         ),
       ),
