@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:book_list_app/book_list/book_list_view_model.dart';
 import 'package:flutter/material.dart';
 
+
 class BookListScreen extends StatelessWidget {
   BookListScreen({Key? key}) : super(key: key);
 
@@ -14,6 +15,14 @@ class BookListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('도서 리스트 앱'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                viewModel.logout();
+              },
+              icon: const Icon(Icons.logout),
+          ),
+        ],
       ), //AppBar
       body: StreamBuilder<QuerySnapshot>(
           stream: viewModel.bookStream,
