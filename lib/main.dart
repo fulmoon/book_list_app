@@ -1,4 +1,5 @@
 import 'package:book_list_app/book_list/book_list_screen.dart';
+import 'package:book_list_app/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -21,9 +22,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        useMaterial3: true,
+        colorScheme: const ColorScheme.highContrastLight(),
+        //primarySwatch: Colors.blue,
       ),
-      home: BookListScreen(),
+      home: LoginScreen(),
     );
   }
 }
