@@ -1,4 +1,5 @@
 import 'package:book_list_app/add_book/add_book_screen.dart';
+import 'package:book_list_app/model/book.dart';
 import 'package:book_list_app/update_book/update_book_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:book_list_app/book_list/book_list_view_model.dart';
@@ -24,7 +25,7 @@ class BookListScreen extends StatelessWidget {
           ),
         ],
       ), //AppBar
-      body: StreamBuilder<QuerySnapshot>(
+      body: StreamBuilder<QuerySnapshot<Book>>(
           stream: viewModel.bookStream,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -37,8 +38,8 @@ class BookListScreen extends StatelessWidget {
 
             return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                Map<String, dynamic> data =
-                    document.data()! as Map<String, dynamic>;
+                Book book =
+                    document.data()! as Book;
                 return Dismissible(
                   onDismissed: (_) {
                     viewModel.deleteBook(document.id);
@@ -57,9 +58,9 @@ class BookListScreen extends StatelessWidget {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateBookScreen(document)),
                       );
                     },
-                    title: Text(data['title']),
-                    subtitle: Text(data['author']),
-                    leading: Image.network(data['imageUrl'], width: 50, height: 100, fit: BoxFit.cover,)
+                    title: Text(book.title),
+                    subtitle: Text(book.author),
+                    leading: Image.network(book.imageUrl, width: 50, height: 100, fit: BoxFit.cover,)
                   ),
                 );
               }).toList(),
