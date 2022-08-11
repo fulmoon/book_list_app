@@ -1,7 +1,7 @@
 import 'package:book_list_app/book_list/book_list_screen.dart';
-import 'package:book_list_app/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterfire_ui/auth.dart';
 
 class RootScreen extends StatelessWidget {
   const RootScreen({Key? key}) : super(key: key);
@@ -14,7 +14,14 @@ class RootScreen extends StatelessWidget {
           User? user = snapshot.data;
 
           if (user == null) {
-            return const LoginScreen();
+            return const SignInScreen(
+                providerConfigs: [
+                  EmailProviderConfiguration(),
+                  GoogleProviderConfiguration(
+                    clientId: '...',
+                  ),
+                ]
+            ); //LoginScreen();
           }
 
           return BookListScreen();
